@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Lottery;
 use App\Models\Bid;
 use App\Models\Winner;
-use App\Models\WinningNumber;
+use App\Models\Number;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -75,10 +75,10 @@ class DrawsController extends Controller
 
         $lottery = Lottery::find($id);
         $bids = Bid::with('user')->where('lottery_id', $id);
-        $prizes = DB::select('select winners.*, winning_numbers.*, bids.*, users.*
-                                from winners, winning_numbers, bids, users
+        $prizes = DB::select('select winners.*, numbers.*, bids.*, users.*
+                                from winners, numbers, bids, users
                                 where winners.bid_id = bids.id
-                                AND winning_numbers.lottery_id = ?
+                                AND numbers.lottery_id = ?
                                 AND bids.user_id = users.id', [$id]);
 
         $bids1 = DB::table('bids')
@@ -244,7 +244,7 @@ class DrawsController extends Controller
 
     public function saveWinner(Request $request)
     {
-        WinningNumber::create($request->all());
+        Number::create($request->all());
 
         $bids = Bid::where('lottery_id', $request->lottery_id)->get();
         $lottery = Lottery::find($request->lottery_id);

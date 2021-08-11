@@ -5,19 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class numbers extends Model
+class Winner extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'lottery_id',
-        'st_number',
-        'nd_number',
-        'rd_number',
+        'bid_id',
+        'profit',
     ];
 
-    public function lottery()
+    public function bid()
     {
-        return $this->belongsTo('App\Models\Lottery');
+        return $this->belongsTo('App\Models\Bid');
     }
 }

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Lottery;
 use App\Models\Bid;
 use App\Models\Winner;
-use App\Models\WinningNumber;
+use App\Models\Number;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;

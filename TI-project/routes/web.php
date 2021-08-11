@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GoogleController;
+use App\Http\Controllers\BidsController;
+use App\Http\Controllers\DrawsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,12 +27,12 @@ Route::get('/dashboard', function () {
 Route::get('auth/google', [GoogleController::class, 'redirectToGoogle']);
 Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
 
-Route::resource('manage-draws', LotteryController::class)->middleware(['auth']);
+Route::resource('manage-draws', DrawsController::class)->middleware(['auth']);
 
-Route::get('draws', [LotteryController::class, 'draws'])->middleware(['auth']);
-Route::get('draws/bid/{id}', [LotteryController::class, 'bid'])->middleware(['auth']);
-Route::post('draws/bid/{id}', [LotteryController::class, 'makeBid'])->middleware(['auth']);
-Route::get('manage-draws/{id}/numbers', [LotteryController::class, 'generateNumber'])->middleware(['auth']);
-Route::post('manage-draws/{id}/numbers', [LotteryController::class, 'saveWinner'])->middleware(['auth']);
-Route::get('bids', [BidController::class, 'indexTwo'])->middleware(['auth']);;
-Route::get('send-email', [MailController::class, 'sendEmail']);
+Route::get('draws', [DrawsController::class, 'draws'])->middleware(['auth']);
+Route::get('manage-draws/{id}/numbers', [DrawsController::class, 'generateNumber'])->middleware(['auth']);
+Route::post('manage-draws/{id}/numbers', [DrawsController::class, 'saveWinner'])->middleware(['auth']);
+Route::get('draws/bid/{id}', [BidsController::class, 'bid'])->middleware(['auth']);
+Route::post('draws/bid/{id}', [BidsController::class, 'makeBid'])->middleware(['auth']);
+Route::get('bids', [BidsController::class, 'createBid'])->middleware(['auth']);;
+Route::get('send-email', [MailsController::class, 'sendEmail']);

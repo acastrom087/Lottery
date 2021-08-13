@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 
 class BidsController extends Controller
 {
-    public function createBid(Type $var = null)
+    public function createBid()
     {
         $user = Auth::user();
 

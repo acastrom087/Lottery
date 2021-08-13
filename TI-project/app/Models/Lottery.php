@@ -16,4 +16,8 @@ class Lottery extends Model
         'deadline',
         'is_active',
     ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
 }

@@ -131,6 +131,8 @@ class DrawsController extends Controller
             $gananciaMinima = $lottery->balance-($numero1->bid_total*60+
             $numero2->bid_total*10+
             $numero3->bid_total*5);
+            $peorCaso = $numero1->bid_total*60+
+            $numero2->bid_total*10 +$numero3->bid_total*5;
             
         }
 

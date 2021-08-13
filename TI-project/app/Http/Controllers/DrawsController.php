@@ -172,6 +172,7 @@ class DrawsController extends Controller
             $numero6->bid_total*5);
             
         }
+        
          
         return view('draws.view-draw', ['lottery' => $lottery, 'bids' => $bids->paginate(8), 'prizes' => $prizes, 'bids1'=>$bids1,
                     'gananciaMaxima'=>$gananciaMaxima, 'gananciaMinima'=>$gananciaMinima, 'peorCaso'=>$peorCaso ]);

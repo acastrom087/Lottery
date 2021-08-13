@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Auth;
 
 class BidsController extends Controller
 {
+    
+   
     public function createBid(Type $var = null)
     {
         $user = Auth::user();
@@ -43,63 +45,47 @@ class BidsController extends Controller
         return view('bids.create', ['lottery' => $lottery, 'user' => $user, 'result' => $result]);
     }
 
+    
     public function makeBid(Request $request)
     {
         $lottery = Lottery::find($request->lottery_id);
-        $bids = DB::table('bids')
+        $bidTop3=[0,0,0];
+        
+        Bid::create($request->all());
+        $bids2 = DB::table('bids')
             ->select(DB::raw('SUM(bid) as bid_total, number as num'))
             ->where('lottery_id', $request->lottery_id)
             ->groupBy('number')
             ->orderBy('bid_total','desc')
             ->get();
-
-        $numero1;
-        $numero2;
-        $numero3;
-        $apuestaTotal;
-        if(count($bids)==0){
-            $numero1 =0;
-            $numero2 =0;
-            $numero3 =0;
-            $apuestaTotal=$request->bid*60;
-        }
-        elseif(count($bids)==1){
-            $numero1 = $bids[0];
-            $numero2 =0;
-            $numero3 =0;
-            $apuestaTotal= $numero1->bid_total*60+
-            + $request->bid*60;
-
-        }elseif(count($bids)==2){
-            $numero1 = $bids[0];
-            $numero2 = $bids[1];
-            $numero3 =0;
-            $apuestaTotal= $numero1->bid_total*60+
-            $numero2->bid_total*10 + $request->bid*60;
-
-        }elseif(count($bids)>=3){
-            $numero1 = $bids[0];
-            $numero2 = $bids[1];
-            $numero3 = $bids[2];
-            $apuestaTotal= $numero1->bid_total*60+
-            $numero2->bid_total*10+
-            $numero3->bid_total*5 + $request->bid*60;
-        }
-
+            
+            
+            for ($i=0; $i <count($bids2) ; $i++) { 
+                $bidTop3[$i]= $bids2[$i]->bid_total;
+                if($i==3){
+                    break;
+                }
+            }
+        $apuestaTotal = $bidTop3[0]*60+ $bidTop3[1]*10+ $bidTop3[2]*5;
         $limite = $lottery->balance - $apuestaTotal;
-        
 
         if($limite >=0){
             $newBalance = $request->bid + $lottery->balance;
             $lottery->update(['balance' => $newBalance]);
-            Bid::create($request->all());
-            return back()->with('success','Bid made successfully!');
+            //Bid::create($request->all());
+            return back()->with('success','Bid Creado');
         }
         elseif($limite <0){
-            $maximo = ($request->bid*60 - $limite)/60;
+            $bid = Bid::all();
+            $eliminar = $bid->last();
+            Bid::destroy($eliminar->id);
             //return back() ->with('alert', 'Updated!');
             //return (['message' => $maximo]);
             return back()->with('success','Bid has reached the limit available');
         }
+        
     }
+
+    
+  
 }

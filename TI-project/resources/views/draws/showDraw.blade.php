@@ -27,7 +27,7 @@
                     </div>
                 @empty
                     <div class="py-3 m-2 align-middle">
-                        <h4>Groups not found</h4>
+                        <h4>Draws not found</h4>
                     </div>
                 @endforelse
         </div>

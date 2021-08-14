@@ -211,7 +211,13 @@ class DrawsController extends Controller
     public function update(Request $request, $id)
     {
         $lottery = Lottery::find($id);
-        $lottery->update($request->all());
+        $name = $request->name;
+        $balance = $request->balance;
+        $start = $request->start;
+        $deadline = $request->deadline;
+        $is_active = $request->has('is_active');
+
+        $lottery->update(['name'=> $name, 'balance' => $balance, 'start'=> $start, 'deadline'=> $deadline, 'is_active' => $is_active]);
         return redirect('/manage-draws');
     }
 

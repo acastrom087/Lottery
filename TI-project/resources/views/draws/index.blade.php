@@ -104,7 +104,7 @@
                                           <div class="flex justify-end text-right space-x-5 mt-5">
                                               <button @click="showModal = !showModal" class="px-4 py-2 text-sm bg-white rounded-xl border transition-colors duration-150 ease-linear border-gray-200 text-gray-500 focus:outline-none focus:ring-0 font-bold hover:bg-gray-50">Cancel</button>
                                               <div>
-                                                <form method="POST" action="/draws/{{$lottery->id}}">
+                                                <form method="POST" action="/manage-draws/{{$lottery->id}}">
                                                   @csrf
                                                   @method('DELETE')                                                
                                                   <button type="submit" value="Delete" class="px-4 py-2 text-sm bg-red-600 rounded-xl border transition-colors duration-150 ease-linear border-gray-200 text-white font-bold hover:bg-red-500">Delete</button>

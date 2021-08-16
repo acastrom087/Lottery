@@ -54,9 +54,11 @@ class BidsController extends Controller
         $newBalance = $request->bid + $lottery->balance;
         Bid::create($request->all());
 
-        $bids = Bid::select('bid')
-                    ->where('lottery_id', $lottery->id)
-                    ->orderByRaw('bid DESC')
+        $bids = DB::table('bids')
+                    ->select(DB::raw('SUM(bid) as bid_total, number as num'))
+                    ->where('lottery_id', $request->lottery_id)
+                    ->groupBy('number')
+                    ->orderBy('bid_total','desc')
                     ->get();
 
         $topBid = 0;
@@ -66,7 +68,7 @@ class BidsController extends Controller
         if ($bids != null) {
             $top3 = collect([]);
             for ($i=0; $i < $bids->count(); $i++) { 
-                $top3[$i] = $bids[$i]->bid;
+                $top3[$i] = $bids[$i]->bid_total;
             }
 
             if($top3->count() == 1){

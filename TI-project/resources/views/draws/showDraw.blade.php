@@ -6,7 +6,7 @@
     </x-slot>
   
     <section class="flex justify-center py-6">
-        <div class="grid grid-flow-col grid-cols-6 gap-4 text-center">
+        <div class="grid grid-flow-col grid-cols-3 gap-4 text-center">
             @forelse ($draws as $draw)
                     <div class="rounded-lg border-solid">
                         <div class="mb-4"> 

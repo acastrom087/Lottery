@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\UsersController;
-use App\Http\Controllers\MailController;
+use App\Http\Controllers\MailsController;
 use App\Http\Controllers\BidsController;
 use App\Http\Controllers\DrawsController;
 

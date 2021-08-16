@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendEmail;
+use Illuminate\Support\Facades\DB;
 
 class MailsController extends Controller
 {
@@ -22,7 +25,7 @@ class MailsController extends Controller
                     with the number '.$prize->number
                 ];
     
-                Mail::to($prize->email)->send(new SendMail($details));
+                Mail::to($prize->email)->send(new SendEmail($details));
             }
         }
         

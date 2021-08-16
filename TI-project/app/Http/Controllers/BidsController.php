@@ -95,31 +95,70 @@ class BidsController extends Controller
         }
         elseif($limite < 0){
             $bid = Bid::all();
-            $eliminar = $bid->last();
+            $lastBid = $bid->last();
+            $eliminar = $lastBid;
             Bid::destroy($eliminar->id);
 
-            $bids2 = Bid::select('bid')
-                            ->where('lottery_id', $lottery->id)
-                            ->orderByRaw('bid DESC')
-                            ->get();
+            $bids2 = DB::table('bids')
+                        ->select(DB::raw('SUM(bid) as bid_total, number as num'))
+                        ->where('lottery_id', $request->lottery_id)
+                        ->groupBy('number')
+                        ->orderBy('bid_total','desc')
+                        ->get();
 
             $limit = 0;
+            $msj = '';
 
             if($bids2->count() == 0){
                 $limit = ($newBalance / 60) - 5;
+                $msj = 'Limit reached, please make a bid equal or less than $'.$limit;
             }
             elseif($bids2->count() == 1){
-                $limit = (($newBalance - $topBid) / 10) - 5;
+                if($lastBid->number == $bids2[0]->num){
+                    $msj = 'Unfortunately, this number does not take any more bids';
+                }else {
+                    $limit = (($newBalance - $topBid) / 10) - 5;
+                    $msj = 'Limit reached, please make a bid equal or less than $'.$limit;
+                } 
+                
             }
             elseif($bids2->count() == 2){
-                $limit = (($newBalance - $topBid - $midBid)  / 5) - 5;
+                if($lastBid->number == $bids2[0]->num){
+                    $msj = 'Unfortunately, this number does not take any more bids';
+                }
+                elseif($lastBid->number == $bids2[1]->num){
+                    $msj = 'Unfortunately, this number does not take any more bids';
+                }
+                else {
+                    $limit = (($newBalance - $topBid - $midBid)  / 5) - 5;
+                    if($limit < 0){
+                        $bottom = $bids2[1]->bid_total;
+                        $xlimit = ($bottom) - 1;
+                        $msj = 'Limit reached, please make a bid equal or less than $'.$xlimit;
+                    }
+                    else {
+                        $msj = 'Limit reached, please make a bid equal or less than $'.$limit;
+                    }
+                }         
             }
             elseif($bids2->count() >=  3){
-                $bottom = $bids2[2]->bid;
-                $limit = ($bottom) - 1;
+                if($lastBid->number == $bids2[0]->num){
+                    $msj = 'Unfortunately, this number does not take any more bids';
+                }
+                elseif($lastBid->number == $bids2[1]->num){
+                    $msj = 'Unfortunately, this number does not take any more bids';
+                }
+                elseif($lastBid->number == $bids2[2]->num){
+                    $msj = 'Unfortunately, this number does not take any more bids';
+                }
+                else {
+                    $bottom = $bids2[2]->bid_total;
+                    $limit = ($bottom) - 1;
+                    $msj = 'Limit reached, please make a bid equal or less than $'.$limit;
+                }
             }
 
-            return back()->with('success','Limit reached, please make a bid equal or less than $'.$limit);
+            return back()->with('success',$msj);
         }
         
     }

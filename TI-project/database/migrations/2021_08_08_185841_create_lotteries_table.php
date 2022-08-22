@@ -17,8 +17,8 @@ class CreateLotteriesTable extends Migration
             $table->id();
             $table->string('name');
             $table->double('balance', 12, 2);
-            $table->timestamp('start', $precision = 0);
-            $table->timestamp('deadline', $precision = 0);
+            $table->date('start');
+            $table->date('deadline');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
